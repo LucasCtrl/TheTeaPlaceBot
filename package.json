@@ -1,0 +1,21 @@
+{
+  "name": "theteaplacebot",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app/core.js",
+  "repository": "git@github.com:LucasCtrl/TheTeaPlaceBot.git",
+  "author": "LucasCtrl <lucasalt@protonmail.com>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^7.19.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1"
+  },
+  "scripts": {
+    "dev": "nodemon --inspect ./app/core.js",
+    "start": "node app/core.js"
+  }
+}
