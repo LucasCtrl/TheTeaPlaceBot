@@ -1,5 +1,7 @@
 const { MessageEmbed } = require('discord.js')
 const { prefix, channelsID, guildID } = require('../config.json')
+const Leveling = require('../leveling')
+
 const currentDate = require('../utils/currentDate')
 
 module.exports = async (bot, webhook, message) => {
@@ -24,4 +26,8 @@ module.exports = async (bot, webhook, message) => {
     message.delete()
     cmd.run(bot, message, args) // Run the command
   }
+
+  // -------------------- Leveling --------------------
+
+  Leveling(message)
 }
