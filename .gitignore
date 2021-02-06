@@ -21,7 +21,9 @@ jspm_packages/
 .yarn-integrity
 
 # config file
-app/config/config.json
+app/config.json
+.env
+
 # IDE
 .idea
 *.iml
