@@ -1,21 +1,40 @@
-const { db } = require('../db')
+const { firebase, db } = require('../db')
 
-const create = async (userId, guildId, callback) => {
+// Create an user
+const create = async (userId, guildId) => {
   const data = {
-    engagement: {
-      level: 0,
-      message: 0,
-      xp: 0,
-    },
+    level: 0,
+    messages: 0,
+    experience: 0,
+    userId: userId,
+    guildId: guildId,
   }
 
-  await db.collection('users').doc(`${guildId}:${userId}`).set(data)
-  return `${guildId}:${userId} created`
-}
-
-const get = async (userId, guildId) => {
-  const res = await db.collection('users').doc(`${guildId}:${userId}`).get()
+  const res = await db.collection('users').add(data)
   return res
 }
 
-module.exports = { get, create }
+// Search an user
+const search = async (userId, guildId) => {
+  const res = await db.collection('users').where('userId', '==', userId).where('guildId', '==', guildId).get()
+  return res
+}
+
+// Get an user
+const get = async (id) => {
+  const res = await db.collection('users').doc(id).get()
+  return res
+}
+
+// Update an user
+const update = async (id) => {
+  const res = await db
+    .collection('users')
+    .doc(id)
+    .update({
+      messages: firebase.firestore.FieldValue.increment(1),
+    })
+  return res
+}
+
+module.exports = { create, search, get, update }
