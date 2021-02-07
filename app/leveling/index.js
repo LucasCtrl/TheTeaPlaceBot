@@ -1,20 +1,27 @@
+const { db } = require('../db')
 const User = require('../models/user')
 
 module.exports = async (message) => {
   const userId = message.author.id
   const guildId = message.guild.id
-  let userExist = false
-  let userData = {}
+  let isUserExist = false
+  let dbUserId = ''
+  let dbUserData = {}
 
-  // -------------------- Retrieve user --------------------
-  const user = await User.get(userId, guildId)
-  userExist = user.exists
+  // -------------------- Test if user exist --------------------
+  const search = await User.search(userId, guildId)
+  isUserExist = !search.empty
 
-  if (userExist) userData = user.data()
+  if (isUserExist) search.forEach((doc) => (dbUserId = doc.id))
 
   // -------------------- Create user --------------------
 
-  if (!userExist) User.create(userId, guildId).then((res) => console.log(res))
+  if (!isUserExist) await User.create(userId, guildId).then((res) => (dbUserId = res.id))
+
+  // -------------------- Retrieve user data --------------------
+  // const user = await User.get(dbUserId)
+  // dbUserData = user.data()
 
   // -------------------- Update user --------------------
+  User.update(dbUserId)
 }
