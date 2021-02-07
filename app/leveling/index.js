@@ -14,9 +14,7 @@ module.exports = async (message) => {
 
   // -------------------- Create user --------------------
 
-  if (!userExist) {
-    User.create(userId, guildId).then((res) => console.log(res))
-  }
+  if (!userExist) User.create(userId, guildId).then((res) => console.log(res))
 
   // -------------------- Update user --------------------
 }
