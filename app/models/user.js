@@ -27,14 +27,22 @@ const get = async (id) => {
 }
 
 // Update an user
-const update = async (id) => {
-  const res = await db
+
+/**
+ * Update an user
+ * @param {String} id - User id
+ * @param {Number} experience - Experience gained
+ * @param {Number} level - Level gained
+ */
+const update = async (id, experience, level) => {
+  await db
     .collection('users')
     .doc(id)
     .update({
       messages: firebase.firestore.FieldValue.increment(1),
+      experience: firebase.firestore.FieldValue.increment(experience),
+      level: firebase.firestore.FieldValue.increment(level),
     })
-  return res
 }
 
 module.exports = { create, search, get, update }

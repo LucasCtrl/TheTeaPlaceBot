@@ -21,7 +21,10 @@ module.exports = async (message) => {
   // -------------------- Retrieve user data --------------------
   // const user = await User.get(dbUserId)
   // dbUserData = user.data()
+  // console.log('here1')
 
   // -------------------- Update user --------------------
-  User.update(dbUserId)
+  let xpGained = Math.floor(Math.random() * 15) + 10
+  User.update(dbUserId, xpGained, 0)
+  // console.log('here2')
 }
