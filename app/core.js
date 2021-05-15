@@ -2,6 +2,7 @@ require('dotenv').config()
 const { Client, Collection, WebhookClient } = require('discord.js')
 
 const { webhook } = require('./config.json')
+const db = require('./db')
 
 const bot = new Client()
 
