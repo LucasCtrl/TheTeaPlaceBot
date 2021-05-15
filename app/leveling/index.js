@@ -1,30 +1,29 @@
-const { db } = require('../db')
-const User = require('../models/user')
+const { createUser, getUser, updateUser } = require('../controllers/User')
 
 module.exports = async (message) => {
   const userId = message.author.id
   const guildId = message.guild.id
   let isUserExist = false
-  let dbUserId = ''
   let dbUserData = {}
 
   // -------------------- Test if user exist --------------------
-  const search = await User.search(userId, guildId)
-  isUserExist = !search.empty
-
-  if (isUserExist) search.forEach((doc) => (dbUserId = doc.id))
+  await getUser(userId, guildId).then((res) => {
+    if (res === null) isUserExist = false
+    else {
+      isUserExist = true
+      dbUserData = res
+    }
+  })
 
   // -------------------- Create user --------------------
-
-  if (!isUserExist) await User.create(userId, guildId).then((res) => (dbUserId = res.id))
-
-  // -------------------- Retrieve user data --------------------
-  // const user = await User.get(dbUserId)
-  // dbUserData = user.data()
-  // console.log('here1')
+  if (!isUserExist) await createUser(userId, guildId).then((res) => (dbUserData = res))
 
   // -------------------- Update user --------------------
   let xpGained = Math.floor(Math.random() * 15) + 10
-  User.update(dbUserId, xpGained, 0)
-  // console.log('here2')
+  let updatedData = {
+    experience: dbUserData.experience + xpGained,
+    level: 0,
+    messages: dbUserData.messages + 1,
+  }
+  await updateUser(dbUserData._id, updatedData.experience, updatedData.level, updatedData.messages)
 }
