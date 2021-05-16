@@ -1,4 +1,4 @@
-const { createUser, getUser, updateUser } = require('../controllers/User')
+const { createUser, getUser, updateUser, incrementUser } = require('../controllers/User')
 
 module.exports = async (message) => {
   const userId = message.author.id
@@ -19,11 +19,29 @@ module.exports = async (message) => {
   if (!isUserExist) await createUser(userId, guildId).then((res) => (dbUserData = res))
 
   // -------------------- Update user --------------------
+  // Give random XP between 15 and 25
   let xpGained = Math.floor(Math.random() * 15) + 10
-  let updatedData = {
-    experience: dbUserData.experience + xpGained,
-    level: 0,
-    messages: dbUserData.messages + 1,
+  await incrementUser(dbUserData._id, 'experience', xpGained)
+  await incrementUser(dbUserData._id, 'messages', 1)
+
+  // Retrieve user data
+  await getUser(userId, guildId).then((res) => (dbUserData = res))
+
+  // Update the level
+  const getLevelXP = (n) => parseInt(100 * 1.2 ** n)
+  const getLevelFromXP = (xp) => {
+    remainingXP = parseInt(xp)
+    level = 0
+    while (remainingXP >= getLevelXP(level)) {
+      remainingXP -= getLevelXP(level)
+      level += 1
+    }
+    return level
   }
-  await updateUser(dbUserData._id, updatedData.experience, updatedData.level, updatedData.messages)
+
+  await updateUser(dbUserData._id, 'level', getLevelFromXP(dbUserData.experience))
+
+  if (dbUserData.level != getLevelFromXP(dbUserData.experience)) {
+    message.reply('You level up to ' + getLevelFromXP(dbUserData.experience))
+  }
 }

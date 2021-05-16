@@ -35,17 +35,32 @@ const createUser = async (userId, guildId) => {
 }
 
 /**
- * Update an user
+ * Update a value on a specific user
  * @param id - User id in the database
- * @param {Number} experience - Total experience of the user
- * @param {Number} level - Total level of the user
- * @param {Number} messages - Total messages of the user
+ * @param {String} key - Key to update
+ * @param {Number} value - Updated value
  */
-const updateUser = async (id, experience, level, messages) => {
+const updateUser = async (id, key, value) => {
   const response = await User.updateOne(
     { _id: id },
     {
-      $set: { experience: experience, level: level, messages: messages },
+      $set: { [key]: value },
+    }
+  )
+  return response
+}
+
+/**
+ * Increment a value on a specific user
+ * @param id - User id in the database
+ * @param {String} key - Key to increment
+ * @param {Number} value - Amount to increment
+ */
+const incrementUser = async (id, key, value) => {
+  const response = await User.updateOne(
+    { _id: id },
+    {
+      $inc: { [key]: value },
     }
   )
   return response
@@ -53,4 +68,4 @@ const updateUser = async (id, experience, level, messages) => {
 
 const deleteUser = async () => {}
 
-module.exports = { getAllUsers, getUser, createUser, updateUser, deleteUser }
+module.exports = { getAllUsers, getUser, createUser, updateUser, incrementUser, deleteUser }
