@@ -42,6 +42,6 @@ module.exports = async (message) => {
   await updateUser(dbUserData._id, 'level', getLevelFromXP(dbUserData.experience))
 
   if (dbUserData.level != getLevelFromXP(dbUserData.experience)) {
-    message.reply('You level up to ' + getLevelFromXP(dbUserData.experience))
+    message.channel.send(`GG <@${userId}>, tu viens de passer au niveau ${getLevelFromXP(dbUserData.experience)} !`)
   }
 }
